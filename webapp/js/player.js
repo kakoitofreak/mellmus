@@ -94,7 +94,7 @@ function playTrack(index) {
     audio.play().catch(e => console.log("Автовоспроизведение заблокировано:", e));
     updateNowPlaying(track);
     highlightActiveTrack(currentTrackIndex);
-    syncFullscreenUI(); // синхронизируем оверлей
+    syncFullscreenUI();
 }
 function updateNowPlaying(track) {
     currentTrackNameSpan.innerText = track.name;
@@ -185,7 +185,9 @@ function onTrackEnded() {
     }
     if (currentPlaylistKey === "Топ по прослушиваниям") {
         updateCurrentPlaylistTracksBySort();
-        renderTrackList(currentPlaylistTracks, currentPlaylistKey);
+        if (typeof renderTrackList === 'function') {
+            renderTrackList(currentPlaylistTracks, currentPlaylistKey);
+        }
         const newIndex = currentPlaylistTracks.findIndex(t => t.src === currentTrack.src);
         if (newIndex !== -1) currentTrackIndex = newIndex;
         highlightActiveTrack(currentTrackIndex);
@@ -308,7 +310,6 @@ function initPlayer() {
         if (audio.duration) audio.currentTime = (e.target.value / 100) * audio.duration;
     });
 
-    // Клик на обложку открывает оверлей
     currentCoverImg.addEventListener('click', openFullscreen);
     closeFullscreen.addEventListener('click', closeFullscreenMode);
 
@@ -337,7 +338,6 @@ window.playTrack = playTrack;
 window.playRandomTrack = playRandomTrack;
 window.getTrackPlays = getTrackPlays;
 window.getTracksForPlaylist = getTracksForPlaylist;
-window.renderTrackList = null;
-window.preloadAllDurations = null;
+window.preloadAllDurations = null; // будет установлено в ui.js
 
 initPlayer();
