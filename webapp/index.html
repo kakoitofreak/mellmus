@@ -3,17 +3,14 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
-    <title>МЕЛЛМУЗ</title>
+    <title>Музыкальный плеер</title>
     <link rel="stylesheet" href="css/style.css">
-    <!-- Font Awesome -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
 </head>
 <body>
-    <!-- Кнопка гамбургер (мобильное меню) -->
     <button class="menu-toggle" id="menu-toggle">☰</button>
 
     <div class="app">
-        <!-- Боковая панель с плейлистами -->
         <aside class="sidebar">
             <div class="logo">
                 <i class="fas fa-headphones"></i> MusicForYou
@@ -23,28 +20,23 @@
             </nav>
         </aside>
 
-        <!-- Основной контент -->
         <main class="main-content">
             <div class="playlist-header">
                 <img id="playlist-cover" src="images/default_playlist.jpg" alt="Playlist cover">
                 <div class="playlist-info">
                     <h1 id="playlist-title">Название плейлиста</h1>
-                    <p id="playlist-description">Вся музычка</p>
+                    <p id="playlist-description">Плейлист, созданный специально для тебя</p>
                     <button id="shuffle-btn" class="shuffle-btn">
                         <i class="fas fa-random"></i> Случайный трек
-                    </button>
-                    <button id="fullscreen-btn" class="fullscreen-btn">
-                        <i class="fas fa-expand"></i> На весь экран
                     </button>
                 </div>
             </div>
             <div class="track-list" id="track-list"></div>
         </main>
 
-        <!-- Нижняя панель плеера -->
         <footer class="player-bar">
             <div class="track-info-mini">
-                <img id="current-cover" src="images/default_track.jpg" alt="cover">
+                <img id="current-cover" src="images/default_track.jpg" alt="cover" style="cursor: pointer;">
                 <div>
                     <div id="current-track-name">Не выбрано</div>
                     <div id="current-artist"></div>
