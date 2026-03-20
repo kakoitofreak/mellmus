@@ -2,7 +2,7 @@ const audio = document.getElementById('audio');
 let currentPlaylistKey = null;
 let currentPlaylistTracks = [];
 let currentTrackIndex = 0;
-let repeatMode = 0; // 0: нет, 1: один трек, 2: плейлист
+let repeatMode = 0;
 let previousVolume = 0.7;
 
 // DOM элементы
@@ -35,7 +35,6 @@ const fullscreenDuration = document.getElementById('fullscreen-duration');
 const fullscreenVolume = document.getElementById('fullscreen-volume');
 const fullscreenVolumeIcon = document.getElementById('fullscreen-volume-icon');
 const closeFullscreen = document.getElementById('close-fullscreen');
-const fullscreenBtn = document.getElementById('fullscreen-btn');
 
 // --- Работа со счётчиками (localStorage) ---
 const PLAYS_STORAGE_KEY = 'trackPlays';
@@ -238,7 +237,7 @@ function syncVolumeSlider() {
     updateVolumeIcon();
 }
 
-// --- Полноэкранный режим ---
+// --- Полноэкранный оверлей (открывается по клику на обложку) ---
 function openFullscreen() {
     if (!currentPlaylistTracks.length) return;
     const track = currentPlaylistTracks[currentTrackIndex];
@@ -260,7 +259,6 @@ function syncFullscreenUI() {
     fullscreenDuration.innerText = formatTime(audio.duration);
     fullscreenVolume.value = audio.volume;
     updateVolumeIcon();
-    // Режим повтора
     if (repeatMode === 1 || repeatMode === 2) fullscreenRepeat.style.color = '#1db954';
     else fullscreenRepeat.style.color = 'white';
 }
@@ -277,6 +275,7 @@ function syncFullscreenWithAudio() {
 // --- Инициализация и подписка на события ---
 function initPlayer() {
     initPlaysCounter();
+
     audio.addEventListener('loadedmetadata', onLoadedMetadata);
     audio.addEventListener('timeupdate', updateProgress);
     audio.addEventListener('ended', onTrackEnded);
@@ -290,6 +289,7 @@ function initPlayer() {
     });
     audio.addEventListener('volumechange', syncVolumeSlider);
     audio.addEventListener('timeupdate', syncFullscreenWithAudio);
+
     volumeSlider.addEventListener('input', (e) => setVolume(e.target.value));
     volumeIcon.addEventListener('click', toggleMute);
     playPauseBtn.addEventListener('click', () => audio.paused ? audio.play() : audio.pause());
@@ -307,8 +307,11 @@ function initPlayer() {
     progressSlider.addEventListener('input', (e) => {
         if (audio.duration) audio.currentTime = (e.target.value / 100) * audio.duration;
     });
-    fullscreenBtn.addEventListener('click', openFullscreen);
+
+    // Клик на обложку открывает оверлей
+    currentCoverImg.addEventListener('click', openFullscreen);
     closeFullscreen.addEventListener('click', closeFullscreenMode);
+
     fullscreenPlayPause.addEventListener('click', () => audio.paused ? audio.play() : audio.pause());
     fullscreenPrev.addEventListener('click', prevTrack);
     fullscreenNext.addEventListener('click', nextTrack);
@@ -325,6 +328,7 @@ function initPlayer() {
     });
     fullscreenVolume.addEventListener('input', (e) => setVolume(e.target.value));
     fullscreenVolumeIcon.addEventListener('click', toggleMute);
+
     setVolume(0.7);
 }
 
@@ -333,7 +337,7 @@ window.playTrack = playTrack;
 window.playRandomTrack = playRandomTrack;
 window.getTrackPlays = getTrackPlays;
 window.getTracksForPlaylist = getTracksForPlaylist;
-window.renderTrackList = null; // будет задано в ui.js
+window.renderTrackList = null;
 window.preloadAllDurations = null;
 
 initPlayer();
