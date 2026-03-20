@@ -116,6 +116,9 @@ function updateTrackDurationDisplay(index, duration, playlistKey) {
         }
     }
 }
+
+// Делаем функции глобальными для доступа из player.js
+window.renderTrackList = renderTrackList;
 window.preloadAllDurations = preloadAllDurations;
 
 // Мобильное меню
