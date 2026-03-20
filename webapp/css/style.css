@@ -106,8 +106,8 @@ nav li.active {
     color: #b3b3b3;
 }
 
-/* Кнопки в шапке */
-.shuffle-btn, .fullscreen-btn {
+/* Кнопка shuffle */
+.shuffle-btn {
     background: #1db954;
     border: none;
     color: white;
@@ -120,9 +120,8 @@ nav li.active {
     display: inline-flex;
     align-items: center;
     gap: 8px;
-    margin-right: 8px;
 }
-.shuffle-btn:hover, .fullscreen-btn:hover {
+.shuffle-btn:hover {
     background: #1ed760;
 }
 
@@ -220,6 +219,7 @@ nav li.active {
     height: 56px;
     object-fit: cover;
     border-radius: 6px;
+    cursor: pointer;
 }
 
 .track-info-mini div {
