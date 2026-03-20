@@ -10,6 +10,8 @@ body {
     color: #ffffff;
     height: 100vh;
     overflow: hidden;
+    overscroll-behavior: none;
+    -webkit-overflow-scrolling: touch;
 }
 
 .app {
@@ -18,7 +20,7 @@ body {
     flex-direction: column;
 }
 
-/* Боковая панель (десктоп) */
+/* Боковая панель */
 .sidebar {
     position: fixed;
     top: 0;
@@ -72,6 +74,7 @@ nav li.active {
     height: calc(100vh - 80px);
     overflow-y: auto;
     background: linear-gradient(180deg, #1e1e2a 0%, #121212 100%);
+    overscroll-behavior: none;
 }
 
 /* Шапка плейлиста */
@@ -101,6 +104,26 @@ nav li.active {
 
 .playlist-info p {
     color: #b3b3b3;
+}
+
+/* Кнопки в шапке */
+.shuffle-btn, .fullscreen-btn {
+    background: #1db954;
+    border: none;
+    color: white;
+    padding: 8px 16px;
+    border-radius: 20px;
+    font-size: 0.9rem;
+    cursor: pointer;
+    margin-top: 12px;
+    transition: background 0.2s;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    margin-right: 8px;
+}
+.shuffle-btn:hover, .fullscreen-btn:hover {
+    background: #1ed760;
 }
 
 /* Список треков */
@@ -159,6 +182,12 @@ nav li.active {
     color: #b3b3b3;
     font-size: 0.85rem;
     white-space: nowrap;
+}
+
+.track-plays {
+    margin-left: 12px;
+    color: #1db954;
+    font-size: 0.8rem;
 }
 
 /* Нижний плеер */
@@ -283,33 +312,99 @@ nav li.active {
     min-width: 40px;
 }
 
-/* Кнопка случайного трека */
-.shuffle-btn {
-    background: #1db954;
+/* Полноэкранный оверлей */
+.fullscreen-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0,0,0,0.95);
+    z-index: 1000;
+    display: none;
+    justify-content: center;
+    align-items: center;
+    backdrop-filter: blur(10px);
+}
+.fullscreen-overlay.active {
+    display: flex;
+}
+.fullscreen-content {
+    text-align: center;
+    max-width: 90%;
+    max-height: 90%;
+    position: relative;
+}
+.fullscreen-content img {
+    width: 80vw;
+    max-width: 500px;
+    border-radius: 16px;
+    box-shadow: 0 0 30px rgba(0,0,0,0.5);
+    margin-bottom: 20px;
+}
+.fullscreen-info {
+    margin: 20px 0;
+}
+.fullscreen-info div:first-child {
+    font-size: 1.8rem;
+    font-weight: bold;
+}
+.fullscreen-info div:last-child {
+    font-size: 1.2rem;
+    color: #b3b3b3;
+}
+.fullscreen-controls {
+    display: flex;
+    gap: 30px;
+    justify-content: center;
+    margin: 20px 0;
+}
+.fullscreen-controls button {
+    background: none;
     border: none;
     color: white;
-    padding: 8px 16px;
-    border-radius: 20px;
-    font-size: 0.9rem;
+    font-size: 2rem;
     cursor: pointer;
-    margin-top: 12px;
-    transition: background 0.2s;
-    display: inline-flex;
-    align-items: center;
-    gap: 8px;
 }
-.shuffle-btn:hover {
-    background: #1ed760;
-}
-
-/* Стили для прослушиваний */
-.track-plays {
-    margin-left: 12px;
+.fullscreen-controls button:hover {
     color: #1db954;
-    font-size: 0.8rem;
+}
+.fullscreen-progress-area, .fullscreen-volume-area {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin: 15px auto;
+    width: 80%;
+    max-width: 500px;
+}
+.fullscreen-progress-area input, .fullscreen-volume-area input {
+    flex: 1;
+    height: 4px;
+    -webkit-appearance: none;
+    background: #4f4f4f;
+    border-radius: 2px;
+}
+.fullscreen-progress-area input::-webkit-slider-thumb,
+.fullscreen-volume-area input::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    width: 12px;
+    height: 12px;
+    background: #1db954;
+    border-radius: 50%;
+    cursor: pointer;
+}
+.close-fullscreen {
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    background: none;
+    border: none;
+    font-size: 2rem;
+    color: white;
+    cursor: pointer;
 }
 
-/* Гамбургер-меню для мобильных */
+/* Мобильная адаптация */
 .menu-toggle {
     display: none;
     position: fixed;
@@ -326,11 +421,9 @@ nav li.active {
 }
 
 @media (max-width: 768px) {
-    /* Показываем кнопку-гамбургер */
     .menu-toggle {
         display: block;
     }
-    /* Боковое меню скрыто за экраном */
     .sidebar {
         transform: translateX(-100%);
         width: 80%;
@@ -342,13 +435,11 @@ nav li.active {
     .sidebar.open {
         transform: translateX(0);
     }
-    /* Основной контент без отступа */
     .main-content {
         margin-left: 0;
         padding: 60px 16px 90px;
         height: calc(100vh - 80px);
     }
-    /* Шапка плейлиста */
     .playlist-header {
         flex-direction: column;
         align-items: center;
@@ -363,7 +454,6 @@ nav li.active {
     .playlist-info h1 {
         font-size: 1.8rem;
     }
-    /* Список треков */
     .track-item {
         padding: 12px;
     }
@@ -378,7 +468,6 @@ nav li.active {
     .track-duration {
         font-size: 0.75rem;
     }
-    /* Нижний плеер */
     .player-bar {
         padding: 0 12px;
         gap: 8px;
@@ -407,9 +496,6 @@ nav li.active {
         justify-content: center;
         margin-bottom: 8px;
     }
-    .volume-area #volume {
-        width: 80%;
-    }
     .track-info-mini img {
         width: 48px;
         height: 48px;
@@ -418,12 +504,16 @@ nav li.active {
         font-size: 1.8rem;
         padding: 12px;
     }
-    .shuffle-btn {
-        padding: 6px 12px;
-        font-size: 0.8rem;
+    .fullscreen-content img {
+        width: 90vw;
     }
-    .track-plays {
-        display: inline-block;
-        margin-left: 6px;
+    .fullscreen-controls button {
+        font-size: 1.5rem;
+    }
+    .fullscreen-info div:first-child {
+        font-size: 1.2rem;
+    }
+    .fullscreen-info div:last-child {
+        font-size: 0.9rem;
     }
 }
