@@ -100,4 +100,31 @@ document.addEventListener('DOMContentLoaded', () => {
     if (shuffleBtn && typeof playRandomTrack === 'function') {
         shuffleBtn.addEventListener('click', playRandomTrack);
     }
+    // Мобильное меню
+document.addEventListener('DOMContentLoaded', () => {
+    const menuToggle = document.getElementById('menu-toggle');
+    const sidebar = document.querySelector('.sidebar');
+    if (menuToggle && sidebar) {
+        menuToggle.addEventListener('click', () => {
+            sidebar.classList.toggle('open');
+        });
+        // Закрывать меню при клике на ссылку (плейлист)
+        const navLinks = document.querySelectorAll('#playlist-nav li');
+        navLinks.forEach(link => {
+            link.addEventListener('click', () => {
+                if (window.innerWidth <= 768) {
+                    sidebar.classList.remove('open');
+                }
+            });
+        });
+        // Закрывать меню при клике вне его (опционально)
+        document.addEventListener('click', (event) => {
+            if (window.innerWidth <= 768 && sidebar.classList.contains('open')) {
+                if (!sidebar.contains(event.target) && event.target !== menuToggle) {
+                    sidebar.classList.remove('open');
+                }
+            }
+        });
+    }
+});
 });
